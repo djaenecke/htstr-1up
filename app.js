@@ -742,11 +742,14 @@ function updateScoreDisplay() {
 function renderTimeline() {
     elements.timeline.innerHTML = '';
 
-    // Sort timeline by year
+    // Sort timeline by year for expert mode
     const sorted = [...state.game.timeline].sort((a, b) => a.year - b.year);
 
-    // In easy mode, only show the last placed card
-    const cardsToShow = state.settings.mode === 'easy' ? [sorted[sorted.length - 1]] : sorted;
+    // In easy mode, only show the last PLACED card (not sorted - it becomes the new "top")
+    // In expert mode, show all cards sorted by year
+    const cardsToShow = state.settings.mode === 'easy'
+        ? [state.game.timeline[state.game.timeline.length - 1]]
+        : sorted;
 
     // Add drop zone at start
     if (state.game.currentCard) {
@@ -801,23 +804,23 @@ function handlePlacement(position) {
     stopPlayback();
 
     const card = state.game.currentCard;
-    const sorted = [...state.game.timeline].sort((a, b) => a.year - b.year);
 
     // Determine if placement is correct
     let correct = false;
 
     if (state.settings.mode === 'easy') {
-        // Easy mode: just compare to the single visible card
-        const topCard = sorted[sorted.length - 1];
+        // Easy mode: compare to the last PLACED card (the current "top" card)
+        const topCard = state.game.timeline[state.game.timeline.length - 1];
         if (position === 0) {
-            // Placed before: card must be earlier or same year
+            // Placed before (left): card must be earlier or same year
             correct = card.year <= topCard.year;
         } else {
-            // Placed after: card must be later or same year
+            // Placed after (right): card must be later or same year
             correct = card.year >= topCard.year;
         }
     } else {
-        // Expert mode: must be in correct position
+        // Expert mode: must be in correct position in the sorted timeline
+        const sorted = [...state.game.timeline].sort((a, b) => a.year - b.year);
         const yearBefore = position > 0 ? sorted[position - 1].year : -Infinity;
         const yearAfter = position < sorted.length ? sorted[position].year : Infinity;
         correct = card.year >= yearBefore && card.year <= yearAfter;
