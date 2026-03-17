@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.3';
+const VERSION = '1.0.4';
 
 // Configuration
 const CONFIG = {
@@ -529,21 +529,23 @@ function shuffleArray(array) {
     }
 }
 
+function getCardId(card) {
+    // Use normalized title+artist to catch duplicates across editions
+    return `${card.title.toLowerCase().trim()}|${card.artist.toLowerCase().trim()}`;
+}
+
 function getNextCard() {
-    // Find a card we haven't used yet
+    // Find a card we haven't used yet (by title+artist to avoid duplicates)
     for (const card of state.allCards) {
-        const id = card.isrc || `${card.edition}-${card.cardNum}`;
+        const id = getCardId(card);
         if (!state.usedCards.has(id)) {
             state.usedCards.add(id);
             return { ...card }; // Return a copy
         }
     }
-    // If all cards used, reshuffle and reset
-    shuffleArray(state.allCards);
-    state.usedCards.clear();
-    const card = state.allCards[0];
-    state.usedCards.add(card.isrc || `${card.edition}-${card.cardNum}`);
-    return { ...card };
+    // All unique songs used - this shouldn't happen normally
+    // Return null to signal no more cards available
+    return null;
 }
 
 function nextRound() {
@@ -555,6 +557,11 @@ function nextRound() {
 
     // Get next card
     const card = getNextCard();
+    if (!card) {
+        // No more unique cards available - player wins!
+        endGame(true);
+        return;
+    }
     card.color = CARD_COLORS[Math.floor(Math.random() * CARD_COLORS.length)];
     state.game.currentCard = card;
 
