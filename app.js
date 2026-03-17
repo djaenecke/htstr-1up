@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.4';
+const VERSION = '1.0.5';
 
 // Configuration
 const CONFIG = {
@@ -82,7 +82,8 @@ const state = {
     deviceId: null,
     cardData: {},           // { 'edition-key': [array of cards] }
     allCards: [],           // Flattened array of all cards from selected editions
-    usedCards: new Set(),   // Track used card ISRCs to avoid duplicates
+    usedCards: new Set(),   // Track used cards by title+artist
+    playedTracks: new Set(), // Track played Spotify URIs to avoid same song
     settings: {
         mode: 'easy',       // 'easy' or 'expert'
         duration: 30,
@@ -496,6 +497,7 @@ function startGame() {
 
     // Reset game state
     state.usedCards.clear();
+    state.playedTracks.clear();
     state.game.active = true;
     state.game.score = 0;
     state.game.timeline = [];
@@ -597,6 +599,14 @@ async function playCard(card) {
             setTimeout(() => nextRound(), 1500);
             return;
         }
+
+        // Skip if this exact Spotify track was already played
+        if (state.playedTracks.has(track.uri)) {
+            showStatus('Duplicate track, skipping...', 'error');
+            setTimeout(() => nextRound(), 1000);
+            return;
+        }
+        state.playedTracks.add(track.uri);
 
         state.game.currentCard.spotifyUri = track.uri;
         state.game.currentCard.spotifyDuration = track.duration_ms;
