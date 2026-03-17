@@ -88,6 +88,7 @@ const state = {
         duration: 30,
         startPosition: 'start',
         goal: 10,
+        timedMode: false,   // Must place before song ends, no pause/replay
         editions: ['hitster-de']
     },
     game: {
@@ -175,6 +176,7 @@ function cacheElements() {
     elements.durationSelect = document.getElementById('duration-select');
     elements.positionSelect = document.getElementById('position-select');
     elements.goalSelect = document.getElementById('goal-select');
+    elements.timedModeCheckbox = document.getElementById('timed-mode');
     elements.editionsContainer = document.getElementById('editions-container');
     elements.scoreDisplay = document.getElementById('score-display');
     elements.cardsPlayed = document.getElementById('cards-played');
@@ -229,6 +231,7 @@ function saveSettings() {
     state.settings.duration = parseInt(elements.durationSelect.value) || 30;
     state.settings.startPosition = elements.positionSelect.value;
     state.settings.goal = parseInt(elements.goalSelect.value);
+    state.settings.timedMode = elements.timedModeCheckbox.checked;
 
     // Get selected editions
     const checkboxes = elements.editionsContainer.querySelectorAll('input:checked');
@@ -460,6 +463,7 @@ function populateEditionsUI() {
     elements.durationSelect.value = state.settings.duration;
     elements.positionSelect.value = state.settings.startPosition;
     elements.goalSelect.value = state.settings.goal;
+    elements.timedModeCheckbox.checked = state.settings.timedMode;
 }
 
 // Game Logic
@@ -493,6 +497,10 @@ function startGame() {
     elements.modeDisplay.textContent = state.settings.mode === 'expert' ? 'Expert' : 'Easy';
     elements.modeDisplay.classList.toggle('expert', state.settings.mode === 'expert');
     updateScoreDisplay();
+
+    // Hide controls in timed mode
+    elements.playPauseBtn.classList.toggle('hidden', state.settings.timedMode);
+    elements.replayBtn.classList.toggle('hidden', state.settings.timedMode);
 
     showScreen('game');
 
@@ -681,6 +689,10 @@ async function startPlaybackAt(uri, position, duration) {
 
             if (remaining <= 0) {
                 stopPlayback();
+                // In timed mode, if card wasn't placed, game over
+                if (state.settings.timedMode && state.game.currentCard && state.game.active) {
+                    endGame(false);
+                }
             }
         }, 100);
 
