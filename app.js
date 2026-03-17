@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.6';
+const VERSION = '1.0.7';
 
 // Configuration
 const CONFIG = {
@@ -172,7 +172,7 @@ function cacheElements() {
     elements.quitGameBtn = document.getElementById('quit-game-btn');
     elements.backToMenuBtn = document.getElementById('back-to-menu-btn');
     elements.playAgainBtn = document.getElementById('play-again-btn');
-    elements.backToMenuBtn = document.getElementById('back-to-menu-btn');
+    elements.gameoverMenuBtn = document.getElementById('gameover-menu-btn');
     elements.modeSelect = document.getElementById('mode-select');
     elements.durationSelect = document.getElementById('duration-select');
     elements.positionSelect = document.getElementById('position-select');
@@ -248,7 +248,7 @@ function setupEventListeners() {
     elements.quitGameBtn.addEventListener('click', quitGame);
     elements.backToMenuBtn.addEventListener('click', quitGame);
     elements.playAgainBtn.addEventListener('click', startGame);
-    elements.backToMenuBtn.addEventListener('click', () => showScreen('settings'));
+    elements.gameoverMenuBtn.addEventListener('click', () => showScreen('settings'));
     elements.playPauseBtn.addEventListener('click', togglePlayPause);
     elements.replayBtn.addEventListener('click', replayTrack);
     elements.refreshBtnLogin.addEventListener('click', reloadApp);
