@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.1';
+const VERSION = '1.0.2';
 
 // Configuration
 const CONFIG = {
@@ -552,20 +552,20 @@ function nextRound() {
     card.color = CARD_COLORS[Math.floor(Math.random() * CARD_COLORS.length)];
     state.game.currentCard = card;
 
-    // Hide card during transition
-    elements.currentCard.style.visibility = 'hidden';
+    // Disable transition for instant reset
+    elements.currentCard.style.transition = 'none';
 
-    // Reset card to back side with new color
-    elements.currentCard.classList.remove('flipped');
+    // Reset card to back side with new color (instant, no animation)
     elements.currentCard.className = `game-card card-color-${card.color}`;
 
-    // Set card front data and show card after flip animation completes
-    setTimeout(() => {
-        elements.currentCard.querySelector('.card-artist').textContent = card.artist;
-        elements.currentCard.querySelector('.card-year').textContent = card.year;
-        elements.currentCard.querySelector('.card-title').textContent = card.title;
-        elements.currentCard.style.visibility = 'visible';
-    }, 100);
+    // Set card front data (hidden by back face)
+    elements.currentCard.querySelector('.card-artist').textContent = card.artist;
+    elements.currentCard.querySelector('.card-year').textContent = card.year;
+    elements.currentCard.querySelector('.card-title').textContent = card.title;
+
+    // Force reflow, then re-enable transition
+    elements.currentCard.offsetHeight;
+    elements.currentCard.style.transition = '';
 
     // Render timeline with drop zones
     renderTimeline();
