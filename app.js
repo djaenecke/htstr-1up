@@ -72,8 +72,8 @@ const EDITION_NAMES = {
     'hitster-ca-aaad0001': 'Canadian'
 };
 
-// Card colors (like tabletop game)
-const CARD_COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'teal'];
+// Card colors (matching the tabletop game)
+const CARD_COLORS = ['teal', 'orange', 'magenta', 'purple', 'blue', 'plum', 'yellow', 'red', 'green', 'cyan'];
 
 // App State
 const state = {
