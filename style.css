@@ -415,7 +415,7 @@ body {
 
 .game-card .card-artist {
     font-size: 0.65rem;
-    color: #888;
+    color: #333;
     margin-bottom: 3px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -426,13 +426,13 @@ body {
 .game-card .card-year {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #fff;
+    color: #000;
     margin-bottom: 3px;
 }
 
 .game-card .card-title {
     font-size: 0.6rem;
-    color: #ccc;
+    color: #333;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
