@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.2';
+const VERSION = '1.0.3';
 
 // Configuration
 const CONFIG = {
@@ -262,18 +262,24 @@ function setupEventListeners() {
 }
 
 async function reloadApp() {
-    // Clear service worker caches
-    if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(key => caches.delete(key)));
+    try {
+        // Clear all caches
+        if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(key => caches.delete(key)));
+        }
+        // Unregister all service workers
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(reg => reg.unregister()));
+        }
+    } catch (e) {
+        console.error('Cache clear failed:', e);
     }
-    // Unregister service workers
-    if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map(reg => reg.unregister()));
-    }
-    // Force reload
-    location.reload(true);
+    // Navigate to cache-busted URL to force fresh load
+    const url = new URL(window.location.href);
+    url.searchParams.set('_reload', Date.now());
+    window.location.replace(url.href);
 }
 
 function showScreen(name) {

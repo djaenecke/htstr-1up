@@ -1,4 +1,4 @@
-const CACHE_NAME = 'htstr1up-v1';
+const CACHE_NAME = 'htstr1up-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -45,9 +45,16 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+    const url = new URL(event.request.url);
+
     // Don't cache Spotify API calls
-    if (event.request.url.includes('spotify.com') ||
-        event.request.url.includes('scdn.co')) {
+    if (url.hostname.includes('spotify.com') ||
+        url.hostname.includes('scdn.co')) {
+        return;
+    }
+
+    // Don't cache requests with query params (cache-busting reloads)
+    if (url.search) {
         return;
     }
 
