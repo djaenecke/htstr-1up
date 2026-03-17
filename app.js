@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 // Configuration
 const CONFIG = {
@@ -170,6 +170,7 @@ function cacheElements() {
     elements.startGameBtn = document.getElementById('start-game-btn');
     elements.logoutBtn = document.getElementById('logout-btn');
     elements.quitGameBtn = document.getElementById('quit-game-btn');
+    elements.backToMenuBtn = document.getElementById('back-to-menu-btn');
     elements.playAgainBtn = document.getElementById('play-again-btn');
     elements.backToMenuBtn = document.getElementById('back-to-menu-btn');
     elements.modeSelect = document.getElementById('mode-select');
@@ -245,6 +246,7 @@ function setupEventListeners() {
     elements.logoutBtn.addEventListener('click', logout);
     elements.startGameBtn.addEventListener('click', startGame);
     elements.quitGameBtn.addEventListener('click', quitGame);
+    elements.backToMenuBtn.addEventListener('click', quitGame);
     elements.playAgainBtn.addEventListener('click', startGame);
     elements.backToMenuBtn.addEventListener('click', () => showScreen('settings'));
     elements.playPauseBtn.addEventListener('click', togglePlayPause);

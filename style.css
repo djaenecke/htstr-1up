@@ -554,6 +554,26 @@ body {
     gap: 10px;
 }
 
+/* Game Actions */
+#game-actions {
+    text-align: center;
+    padding: 10px;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 5px 10px;
+}
+
+.btn-link:hover {
+    color: #aaa;
+}
+
 /* Countdown effect */
 #player-controls.countdown #time-display {
     color: #e74c3c;
