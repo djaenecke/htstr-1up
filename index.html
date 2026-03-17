@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Htstr 1UP</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <h1>Htstr 1UP</h1>
+            <p>Single Player Hitster</p>
+            <button id="login-btn" class="btn-primary"><svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="12" r="10" fill="#1DB954"/><path d="M16.5 12.5c-2.5-1.5-6-1.5-8 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M15 14.5c-2-1-4.5-1-6 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M13.5 16.5c-1-.5-2-.5-3 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg> Login with Spotify</button>
+            <p class="hint">Requires Spotify Premium</p>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settings-screen" class="screen hidden">
+            <h1>Htstr 1UP</h1>
+            <div class="settings-card">
+                <h2>Game Settings</h2>
+
+                <div class="setting">
+                    <label for="mode-select">Game Mode</label>
+                    <select id="mode-select">
+                        <option value="easy">Easy (compare to last card)</option>
+                        <option value="expert">Expert (place in timeline)</option>
+                    </select>
+                </div>
+
+                <div class="setting">
+                    <label for="duration-select">Playback Duration</label>
+                    <select id="duration-select">
+                        <option value="15">15 seconds</option>
+                        <option value="30" selected>30 seconds</option>
+                        <option value="45">45 seconds</option>
+                        <option value="60">60 seconds</option>
+                        <option value="0">Full song</option>
+                    </select>
+                </div>
+
+                <div class="setting">
+                    <label for="position-select">Start Position</label>
+                    <select id="position-select">
+                        <option value="start">From song start</option>
+                        <option value="random">Random position</option>
+                    </select>
+                </div>
+
+                <div class="setting">
+                    <label for="goal-select">Win Condition</label>
+                    <select id="goal-select">
+                        <option value="5">5 correct placements</option>
+                        <option value="10" selected>10 correct placements</option>
+                        <option value="15">15 correct placements</option>
+                        <option value="20">20 correct placements</option>
+                        <option value="0">Unlimited (play until mistake)</option>
+                    </select>
+                </div>
+
+                <div class="setting">
+                    <label>Editions</label>
+                    <div id="editions-container" class="editions-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <button id="start-game-btn" class="btn-primary" disabled>
+                    <svg viewBox="0 0 24 24" class="icon"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg> Start Game
+                </button>
+                <button id="logout-btn" class="btn-secondary">
+                    <svg viewBox="0 0 24 24" class="icon"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Logout
+                </button>
+                <div id="version-display"></div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <header>
+                <div class="header-left">
+                    <span id="score-display">0 / 10</span>
+                    <span id="mode-display" class="mode-badge">Easy</span>
+                </div>
+                <button id="quit-game-btn" class="btn-icon">
+                    <svg viewBox="0 0 24 24" class="icon"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+            </header>
+
+            <!-- Timeline -->
+            <div id="timeline-container">
+                <div id="timeline">
+                    <!-- Cards are inserted here -->
+                </div>
+            </div>
+
+            <!-- Current Card (being played) -->
+            <div id="current-card-container">
+                <div id="current-card" class="game-card">
+                    <div class="card-face card-front">
+                        <div class="card-artist"></div>
+                        <div class="card-year"></div>
+                        <div class="card-title"></div>
+                    </div>
+                    <div class="card-face card-back-face"></div>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div id="player-controls">
+                <div id="timer-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+                        <circle class="timer-progress" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div id="time-display">0:00</div>
+                </div>
+                <div id="controls">
+                    <button id="play-pause-btn" class="btn-control">
+                        <svg viewBox="0 0 24 24" class="icon"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
+                    </button>
+                    <button id="replay-btn" class="btn-control">
+                        <svg viewBox="0 0 24 24" class="icon"><path d="M1 4v6h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div id="status-message"></div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="screen hidden">
+            <div class="gameover-content">
+                <h1 id="gameover-title">Game Over</h1>
+                <div id="gameover-stats">
+                    <div class="stat">
+                        <span class="stat-value" id="final-score">0</span>
+                        <span class="stat-label">Cards Placed</span>
+                    </div>
+                </div>
+                <div id="last-card-reveal" class="hidden">
+                    <p>The song was:</p>
+                    <div class="reveal-card">
+                        <div class="card-artist" id="reveal-artist"></div>
+                        <div class="card-year" id="reveal-year"></div>
+                        <div class="card-title" id="reveal-title"></div>
+                    </div>
+                </div>
+                <button id="play-again-btn" class="btn-primary">
+                    <svg viewBox="0 0 24 24" class="icon"><path d="M1 4v6h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Play Again
+                </button>
+                <button id="back-to-menu-btn" class="btn-secondary">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
