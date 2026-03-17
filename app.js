@@ -550,21 +550,20 @@ function nextRound() {
     card.color = CARD_COLORS[Math.floor(Math.random() * CARD_COLORS.length)];
     state.game.currentCard = card;
 
-    // Clear card data first (prevent flash of next card's info)
-    elements.currentCard.querySelector('.card-artist').textContent = '';
-    elements.currentCard.querySelector('.card-year').textContent = '';
-    elements.currentCard.querySelector('.card-title').textContent = '';
+    // Hide card during transition
+    elements.currentCard.style.visibility = 'hidden';
 
     // Reset card to back side with new color
     elements.currentCard.classList.remove('flipped');
     elements.currentCard.className = `game-card card-color-${card.color}`;
 
-    // Set card front data after brief delay (card is now face-down)
+    // Set card front data and show card after flip animation completes
     setTimeout(() => {
         elements.currentCard.querySelector('.card-artist').textContent = card.artist;
         elements.currentCard.querySelector('.card-year').textContent = card.year;
         elements.currentCard.querySelector('.card-title').textContent = card.title;
-    }, 50);
+        elements.currentCard.style.visibility = 'visible';
+    }, 100);
 
     // Render timeline with drop zones
     renderTimeline();
