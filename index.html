@@ -96,15 +96,17 @@
         <!-- Game Screen -->
         <div id="game-screen" class="screen hidden">
             <header>
-                <div class="header-left">
-                    <span id="score-display">0 / 10</span>
-                    <span id="cards-played" class="cards-counter">1 card</span>
-                    <span id="mode-display" class="mode-badge">Easy</span>
-                </div>
+                <span id="score-display">0 / 10</span>
                 <button id="quit-game-btn" class="btn-icon">
                     <svg viewBox="0 0 24 24" class="icon"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                 </button>
             </header>
+
+            <!-- Game Info Overlay -->
+            <div id="game-info-overlay">
+                <span id="cards-played" class="cards-counter">1 card</span>
+                <span id="mode-display" class="mode-badge">Easy</span>
+            </div>
 
             <!-- Timeline -->
             <div id="timeline-container">
