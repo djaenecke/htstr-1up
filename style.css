@@ -91,6 +91,25 @@ body {
     font-size: 0.9rem;
 }
 
+.btn-refresh {
+    background: none;
+    border: 1px solid #444;
+    color: #888;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-refresh:hover {
+    border-color: #666;
+    color: #aaa;
+}
+
 .btn-control {
     background: #333;
     color: #fff;
@@ -266,6 +285,11 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     color: #1db954;
+}
+
+.cards-counter {
+    font-size: 0.8rem;
+    color: #888;
 }
 
 .mode-badge {

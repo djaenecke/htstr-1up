@@ -19,6 +19,7 @@
             <p>Single Player Hitster</p>
             <button id="login-btn" class="btn-primary"><svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="12" r="10" fill="#1DB954"/><path d="M16.5 12.5c-2.5-1.5-6-1.5-8 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M15 14.5c-2-1-4.5-1-6 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M13.5 16.5c-1-.5-2-.5-3 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg> Login with Spotify</button>
             <p class="hint">Requires Spotify Premium</p>
+            <button id="refresh-btn-login" class="btn-refresh"><svg viewBox="0 0 24 24" class="icon"><path d="M1 4v6h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 20v-6h-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Reload App</button>
         </div>
 
         <!-- Settings Screen -->
@@ -78,6 +79,9 @@
                 <button id="logout-btn" class="btn-secondary">
                     <svg viewBox="0 0 24 24" class="icon"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Logout
                 </button>
+                <button id="refresh-btn-settings" class="btn-refresh">
+                    <svg viewBox="0 0 24 24" class="icon"><path d="M1 4v6h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 20v-6h-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Reload App
+                </button>
                 <div id="version-display"></div>
             </div>
         </div>
@@ -87,6 +91,7 @@
             <header>
                 <div class="header-left">
                     <span id="score-display">0 / 10</span>
+                    <span id="cards-played" class="cards-counter">1 card</span>
                     <span id="mode-display" class="mode-badge">Easy</span>
                 </div>
                 <button id="quit-game-btn" class="btn-icon">

@@ -177,6 +177,7 @@ function cacheElements() {
     elements.goalSelect = document.getElementById('goal-select');
     elements.editionsContainer = document.getElementById('editions-container');
     elements.scoreDisplay = document.getElementById('score-display');
+    elements.cardsPlayed = document.getElementById('cards-played');
     elements.modeDisplay = document.getElementById('mode-display');
     elements.timeline = document.getElementById('timeline');
     elements.currentCard = document.getElementById('current-card');
@@ -192,6 +193,8 @@ function cacheElements() {
     elements.revealYear = document.getElementById('reveal-year');
     elements.revealTitle = document.getElementById('reveal-title');
     elements.playerControls = document.getElementById('player-controls');
+    elements.refreshBtnLogin = document.getElementById('refresh-btn-login');
+    elements.refreshBtnSettings = document.getElementById('refresh-btn-settings');
 }
 
 async function exchangeCodeForToken(code, verifier) {
@@ -243,12 +246,29 @@ function setupEventListeners() {
     elements.backToMenuBtn.addEventListener('click', () => showScreen('settings'));
     elements.playPauseBtn.addEventListener('click', togglePlayPause);
     elements.replayBtn.addEventListener('click', replayTrack);
+    elements.refreshBtnLogin.addEventListener('click', reloadApp);
+    elements.refreshBtnSettings.addEventListener('click', reloadApp);
 
     // Enable start button when at least one edition is selected
     elements.editionsContainer.addEventListener('change', () => {
         const anyChecked = elements.editionsContainer.querySelector('input:checked');
         elements.startGameBtn.disabled = !anyChecked;
     });
+}
+
+async function reloadApp() {
+    // Clear service worker caches
+    if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(key => caches.delete(key)));
+    }
+    // Unregister service workers
+    if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(reg => reg.unregister()));
+    }
+    // Force reload
+    location.reload(true);
 }
 
 function showScreen(name) {
@@ -522,14 +542,21 @@ function nextRound() {
     card.color = CARD_COLORS[Math.floor(Math.random() * CARD_COLORS.length)];
     state.game.currentCard = card;
 
-    // Show card back
+    // Clear card data first (prevent flash of next card's info)
+    elements.currentCard.querySelector('.card-artist').textContent = '';
+    elements.currentCard.querySelector('.card-year').textContent = '';
+    elements.currentCard.querySelector('.card-title').textContent = '';
+
+    // Reset card to back side with new color
     elements.currentCard.classList.remove('flipped');
     elements.currentCard.className = `game-card card-color-${card.color}`;
 
-    // Set card front data (hidden until flipped)
-    elements.currentCard.querySelector('.card-artist').textContent = card.artist;
-    elements.currentCard.querySelector('.card-year').textContent = card.year;
-    elements.currentCard.querySelector('.card-title').textContent = card.title;
+    // Set card front data after brief delay (card is now face-down)
+    setTimeout(() => {
+        elements.currentCard.querySelector('.card-artist').textContent = card.artist;
+        elements.currentCard.querySelector('.card-year').textContent = card.year;
+        elements.currentCard.querySelector('.card-title').textContent = card.title;
+    }, 50);
 
     // Render timeline with drop zones
     renderTimeline();
@@ -736,6 +763,10 @@ function formatTime(ms) {
 function updateScoreDisplay() {
     const goal = state.settings.goal === 0 ? '?' : state.settings.goal;
     elements.scoreDisplay.textContent = `${state.game.score} / ${goal}`;
+
+    // Update cards played counter
+    const count = state.game.timeline.length;
+    elements.cardsPlayed.textContent = `${count} card${count !== 1 ? 's' : ''}`;
 }
 
 // Timeline Rendering
