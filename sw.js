@@ -1,4 +1,4 @@
-const CACHE_NAME = 'htstr1up-v3';
+const CACHE_NAME = 'htstr1up-v4';
 const ASSETS = [
     './',
     './index.html',

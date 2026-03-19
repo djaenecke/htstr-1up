@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.8';
+const VERSION = '1.0.9';
 
 // Configuration
 const CONFIG = {
@@ -630,9 +630,9 @@ async function searchSpotify(card) {
         }
     }
 
-    // Fallback to title + artist
+    // Fallback to title + artist - get multiple results to find best match
     const query = `track:${card.title} artist:${card.artist}`;
-    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=1`, {
+    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`, {
         headers: { 'Authorization': `Bearer ${state.accessToken}` }
     });
 
@@ -642,7 +642,22 @@ async function searchSpotify(card) {
     }
 
     const data = await response.json();
-    return data.tracks.items[0] || null;
+    const tracks = data.tracks.items;
+    if (!tracks.length) return null;
+
+    // Prefer original versions over remixes/remasters (unless card title has these terms)
+    const cardTitleLower = card.title.toLowerCase();
+    const isRemixInOriginal = /remix|remaster|live|edit|version/i.test(cardTitleLower);
+
+    if (!isRemixInOriginal) {
+        const original = tracks.find(t =>
+            !/remix|remaster|live|edit/i.test(t.name) ||
+            t.name.toLowerCase().includes(cardTitleLower)
+        );
+        if (original) return original;
+    }
+
+    return tracks[0];
 }
 
 async function playTrack(track) {
