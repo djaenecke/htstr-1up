@@ -347,7 +347,7 @@ body {
 .drop-zone {
     width: 30px;
     min-width: 30px;
-    height: 120px;
+    height: 100px;
     border: 2px dashed #444;
     border-radius: 8px;
     display: flex;
@@ -377,10 +377,54 @@ body {
     color: #1db954;
 }
 
+/* Easy mode drop zones with Earlier/Later labels */
+.drop-zone-earlier,
+.drop-zone-later {
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+}
+
+.drop-zone-earlier:hover,
+.drop-zone-later:hover {
+    width: 100px;
+    background: rgba(29, 185, 84, 0.15);
+}
+
+.drop-zone-earlier::before {
+    content: '\2190';
+    font-size: 2rem;
+}
+
+.drop-zone-earlier::after {
+    content: 'Earlier';
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.drop-zone-later::before {
+    content: '\2192';
+    font-size: 2rem;
+}
+
+.drop-zone-later::after {
+    content: 'Later';
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.drop-zone-earlier:hover::after,
+.drop-zone-later:hover::after {
+    color: #1db954;
+}
+
 /* Game Cards */
 .game-card {
     width: 100px;
-    height: 120px;
+    height: 100px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.6s;
@@ -478,8 +522,8 @@ body {
 }
 
 #current-card {
-    width: 140px;
-    height: 170px;
+    width: 120px;
+    height: 120px;
 }
 
 #current-card .card-face {
@@ -736,7 +780,7 @@ body {
     }
 
     #current-card {
-        width: 120px;
-        height: 150px;
+        width: 100px;
+        height: 100px;
     }
 }

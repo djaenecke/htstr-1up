@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.7';
+const VERSION = '1.0.8';
 
 // Configuration
 const CONFIG = {
@@ -610,9 +610,10 @@ async function playCard(card) {
 }
 
 async function searchSpotify(card) {
-    // Try ISRC first
-    if (card.isrc) {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=isrc:${card.isrc}&type=track&limit=1`, {
+    // Try ISRC first (trim to handle whitespace in CSV data)
+    const isrc = card.isrc?.trim();
+    if (isrc) {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=isrc:${isrc}&type=track&limit=1`, {
             headers: { 'Authorization': `Bearer ${state.accessToken}` }
         });
 
@@ -849,6 +850,15 @@ function createDropZone(position) {
     const div = document.createElement('div');
     div.className = 'drop-zone';
     div.dataset.position = position;
+
+    // In easy mode, add Earlier/Later classes
+    if (state.settings.mode === 'easy') {
+        if (position === 0) {
+            div.classList.add('drop-zone-earlier');
+        } else {
+            div.classList.add('drop-zone-later');
+        }
+    }
 
     div.addEventListener('click', () => handlePlacement(position));
 
