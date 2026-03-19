@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.10';
+const VERSION = '1.0.11';
 
 // Configuration
 const CONFIG = {
@@ -803,8 +803,7 @@ function formatTime(ms) {
 
 function updateScoreDisplay() {
     const goal = state.settings.goal === 0 ? '?' : state.settings.goal;
-    const count = state.game.timeline.length;
-    elements.scoreDisplay.textContent = `${count} / ${goal} cards`;
+    elements.scoreDisplay.textContent = `${state.game.score} / ${goal} cards`;
 }
 
 // Timeline Rendering
