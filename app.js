@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.9';
+const VERSION = '1.0.10';
 
 // Configuration
 const CONFIG = {
@@ -180,7 +180,6 @@ function cacheElements() {
     elements.timedModeCheckbox = document.getElementById('timed-mode');
     elements.editionsContainer = document.getElementById('editions-container');
     elements.scoreDisplay = document.getElementById('score-display');
-    elements.cardsPlayed = document.getElementById('cards-played');
     elements.modeDisplay = document.getElementById('mode-display');
     elements.timeline = document.getElementById('timeline');
     elements.currentCard = document.getElementById('current-card');
@@ -804,11 +803,8 @@ function formatTime(ms) {
 
 function updateScoreDisplay() {
     const goal = state.settings.goal === 0 ? '?' : state.settings.goal;
-    elements.scoreDisplay.textContent = `${state.game.score} / ${goal}`;
-
-    // Update cards played counter
     const count = state.game.timeline.length;
-    elements.cardsPlayed.textContent = `${count} card${count !== 1 ? 's' : ''}`;
+    elements.scoreDisplay.textContent = `${count} / ${goal} cards`;
 }
 
 // Timeline Rendering
