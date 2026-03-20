@@ -1,5 +1,5 @@
 // Version
-const VERSION = '1.0.11';
+const VERSION = '1.0.12';
 
 // Configuration
 const CONFIG = {
@@ -262,23 +262,28 @@ function setupEventListeners() {
 
 async function reloadApp() {
     try {
+        // Unregister all service workers first
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(reg => reg.unregister()));
+        }
         // Clear all caches
         if ('caches' in window) {
             const keys = await caches.keys();
             await Promise.all(keys.map(key => caches.delete(key)));
         }
-        // Unregister all service workers
-        if ('serviceWorker' in navigator) {
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(registrations.map(reg => reg.unregister()));
-        }
+        // Pre-fetch fresh versions of main files
+        const timestamp = Date.now();
+        await Promise.all([
+            fetch(`index.html?_=${timestamp}`, { cache: 'no-store' }),
+            fetch(`app.js?_=${timestamp}`, { cache: 'no-store' }),
+            fetch(`style.css?_=${timestamp}`, { cache: 'no-store' })
+        ]);
     } catch (e) {
         console.error('Cache clear failed:', e);
     }
-    // Navigate to cache-busted URL to force fresh load
-    const url = new URL(window.location.href);
-    url.searchParams.set('_reload', Date.now());
-    window.location.replace(url.href);
+    // Hard reload - bypass cache completely
+    window.location.href = window.location.pathname + '?_reload=' + Date.now();
 }
 
 function showScreen(name) {
